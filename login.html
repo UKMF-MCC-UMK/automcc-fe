@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet" />
+    <title>login - AutoDeploy</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+
+        font-family: "Lexend", sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .containner {
+        max-width: 30rem;
+        width: 100%;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 3em;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        /* width: 100%; */
+      }
+
+      .wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        /* width: 100%; */
+      }
+
+      .head {
+        /* width: 100%; */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
+        /* gap: 10px; */
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: auto;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 0.2em solid #a1a1a1;
+        border-radius: 5px;
+      }
+
+      button[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: none;
+        background-color: #2196f3;
+        color: white;
+      }
+      button[type="submit"]:disabled {
+        background-color: #cccccc;
+      }
+
+      .info-box {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #5b5b5b;
+        color: #fff;
+        margin-bottom: 10px;
+      }
+      .info-box.hide {
+        display: none;
+      }
+      .info-box.error {
+        background-color: #f44336;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="containner">
+      <div class="head">
+        <!-- <img src="" alt=""> -->
+        <h1>MCC</h1>
+        <p>Wellcome Back!</p>
+      </div>
+      <form action="/login" method="post">
+        <div class="info-box hide">
+          <p></p>
+        </div>
+        <div class="wrap">
+          <label for="username">NIM</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+        <div class="wrap">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit" id="submit">Login</button>
+      </form>
+    </div>
+  </body>
+</html>
