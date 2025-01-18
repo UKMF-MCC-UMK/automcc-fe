@@ -118,5 +118,62 @@
         <button type="submit" id="submit">Login</button>
       </form>
     </div>
+
+    <script>
+      const FORM = document.querySelector("form");
+      const INFO_BOX = document.querySelector(".info-box");
+      const NIM_INPUT = document.querySelector("#username");
+      const PASSWORD_INPUT = document.querySelector("#password");
+      const SUBMIT_BTN = document.querySelector("#submit");
+
+      // api point
+      const API_POINT = "./tes.json";
+      const REDITECT_TO = "/dashboad";
+
+      function set_info(msg, is_err) {
+        INFO_BOX.querySelector("p").textContent = msg;
+        INFO_BOX.classList.toggle("hide", false);
+        INFO_BOX.classList.toggle("error", is_err);
+      }
+
+      function disabled_input(force = true) {
+        NIM_INPUT.disabled = force;
+        PASSWORD_INPUT.disabled = force;
+        SUBMIT_BTN.disabled = force;
+      }
+
+      async function submit_handler(event) {
+        event.preventDefault();
+        disabled_input();
+        set_info("sedang login mohon tunggu", false);
+
+        const nim = NIM_INPUT.value;
+        const password = PASSWORD_INPUT.value;
+
+        const res = await fetch(API_POINT, { method: "GET" });
+
+        switch (res.status) {
+          case 200:
+            // success
+            set_info("Login Berhasil", false);
+            const json = await res.json();
+            const data = json.data.token;
+
+            localStorage.setItem("token", data);
+            window.location.href = "/dashboard";
+            break;
+          case 401:
+            // wrong nim/pass
+            set_info("NIM/Password salah", true);
+            break;
+
+          default:
+            break;
+        }
+
+        disabled_input(false);
+      }
+      FORM.addEventListener("submit", submit_handler);
+    </script>
   </body>
 </html>
