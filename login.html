@@ -150,7 +150,13 @@
         const nim = NIM_INPUT.value;
         const password = PASSWORD_INPUT.value;
 
-        const res = await fetch(API_POINT, { method: "POST" });
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nim, password})
+        };
+
+        const res = await fetch(API_POINT, requestOptions);
 
         switch (res.status) {
           case 200:
