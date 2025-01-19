@@ -127,7 +127,7 @@
       const SUBMIT_BTN = document.querySelector("#submit");
 
       // api point
-      const API_POINT = "./tes.json";
+      const API_POINT = "/login";
       const REDITECT_TO = "/dashboad";
 
       function set_info(msg, is_err) {
@@ -150,7 +150,7 @@
         const nim = NIM_INPUT.value;
         const password = PASSWORD_INPUT.value;
 
-        const res = await fetch(API_POINT, { method: "GET" });
+        const res = await fetch(API_POINT, { method: "POST" });
 
         switch (res.status) {
           case 200:
