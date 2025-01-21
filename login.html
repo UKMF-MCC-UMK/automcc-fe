@@ -130,6 +130,10 @@
       const API_POINT = "/login";
       const REDITECT_TO = "/dashboad";
 
+      // check localStorage if had allready token
+      let token = localStorage.getItem("token");
+      if (token) set_info("Sepertinya kamu udah login nih.", false);
+
       function set_info(msg, is_err) {
         INFO_BOX.querySelector("p").textContent = msg;
         INFO_BOX.classList.toggle("hide", false);
@@ -163,7 +167,7 @@
             // success
             set_info("Login Berhasil", false);
             const json = await res.json();
-            const data = json.data.token;
+            const data = json.data.access_token;
 
             localStorage.setItem("token", data);
             window.location.href = REDITECT_TO;
@@ -181,6 +185,7 @@
 
         disabled_input(false);
       }
+      
       FORM.addEventListener("submit", submit_handler);
     </script>
   </body>
