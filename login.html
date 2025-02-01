@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend&display=swap"
+      rel="stylesheet"
+    />
     <title>login - AutoDeploy</title>
     <style>
       body {
@@ -98,11 +101,11 @@
   </head>
   <body>
     <div class="containner">
-      <div class="head">
+      <header class="head">
         <!-- <img src="" alt=""> -->
         <h1>MCC</h1>
         <p>Wellcome Back!</p>
-      </div>
+      </header>
       <form action="/login" method="post">
         <div class="info-box hide">
           <p></p>
@@ -127,7 +130,7 @@
       const SUBMIT_BTN = document.querySelector("#submit");
 
       // api point
-      const API_POINT = "/login";
+      const API_POINT = "http://127.0.0.1:8000/api/login";
       const REDITECT_TO = "/dashboad";
 
       // check localStorage if had allready token
@@ -149,15 +152,15 @@
       async function submit_handler(event) {
         event.preventDefault();
         disabled_input();
-        set_info("sedang login mohon tunggu", false);
+        set_info("Sedang login mohon tunggu", false);
 
         const nim = NIM_INPUT.value;
         const password = PASSWORD_INPUT.value;
 
         const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nim, password})
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nim, password }),
         };
 
         const res = await fetch(API_POINT, requestOptions);
@@ -178,14 +181,14 @@
             break;
 
           default:
-            // default 
+            // default
             set_info(`Gagal login, status : ${res.status}`, true);
             break;
         }
 
         disabled_input(false);
       }
-      
+
       FORM.addEventListener("submit", submit_handler);
     </script>
   </body>
