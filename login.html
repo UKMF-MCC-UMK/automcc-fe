@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript" src="env.js" ></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet" />
@@ -127,8 +128,8 @@
       const SUBMIT_BTN = document.querySelector("#submit");
 
       // api point
-      const API_POINT = "/login";
-      const REDITECT_TO = "/dashboad";
+      const API_POINT = BACKEND_URL + "/login";
+      const REDIRECT_TO = "/dashboard";
 
       // check localStorage if had allready token
       let token = localStorage.getItem("token");
@@ -170,7 +171,7 @@
             const data = json.data.access_token;
 
             localStorage.setItem("token", data);
-            window.location.href = REDITECT_TO;
+            window.location.href = REDIRECT_TO;
             break;
           case 401:
             // wrong nim/pass
