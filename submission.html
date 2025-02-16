@@ -3,9 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript" src="env.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend&display=swap"
+      rel="stylesheet"
+    />
     <title>login - AutoDeploy</title>
     <style>
       body {
@@ -184,7 +188,7 @@
       </div>
 
       <br />
-      <form action="/submit.html" method="post">
+      <form action="" method="post">
         <div class="info-box hide">
           <p></p>
         </div>
@@ -192,7 +196,14 @@
         <div class="file-list" id="fileList"></div>
         <div class="drop-zone" id="dropZone">
           <div class="container">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cloud-upload-fill" viewBox="0 0 16 16">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              class="bi bi-cloud-upload-fill"
+              viewBox="0 0 16 16"
+            >
               <path
                 fill-rule="evenodd"
                 d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0m-.5 14.5V11h1v3.5a.5.5 0 0 1-1 0"
@@ -201,8 +212,16 @@
             <p>seret file atau klik untuk menambah file</p>
           </div>
         </div>
-        <input type="file" id="fileInput" multiple hidden />
-        <button type="submit" id="submit" class="btn active" disabled>Simpan Perubahan</button>
+        <input
+          type="file"
+          accept=".html, .js, .css"
+          id="fileInput"
+          multiple
+          hidden
+        />
+        <button type="submit" id="submit" class="btn active" disabled>
+          Simpan Perubahan
+        </button>
       </form>
 
       <!-- <div class="wrap">
@@ -214,7 +233,12 @@
     <script>
       // config
       const MAX_FILE_SIZE = 1024 * 1024; // => limiting each file (bytes); set zero (0) to disable
-      const FILE_TYPE_ALLOWED = ["text/html", "text/css", "text/javascript", "image/png"];
+      const FILE_TYPE_ALLOWED = [
+        "text/html",
+        "text/css",
+        "text/javascript",
+        "image/png",
+      ];
 
       const FORM = document.querySelector("form");
       const INFO_BOX = document.querySelector(".info-box");
@@ -234,9 +258,11 @@
 
       async function get_fetch(url, requestOptions = {}) {
         set_loading();
-        const token = localStorage.getItem("token");
 
-        requestOptions.headers = { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
+        requestOptions.headers = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        };
 
         const res = await fetch(url, requestOptions);
 
@@ -266,8 +292,9 @@
       }
 
       async function load_assignment() {
+        const API_POINT = BACKEND_URL + "/assignments";
         TASK_SELECTOR.disabled = true;
-        const res = await get_fetch("/api/assignments", { method: "GET" });
+        const res = await get_fetch(API_POINT, { method: "GET" });
         if (!res.ok) return;
 
         const data = await res.json();
@@ -275,6 +302,34 @@
         display_assignment();
         display_criteria(assignment[0].criterias);
         TASK_SELECTOR.disabled = false;
+      }
+
+      async function submit_submission() {
+        TASK_SELECTOR.disabled = true;
+        SUBMIT_BTN.disabled = true;
+
+        const API_POINT = BACKEND_URL + "/submissions";
+        const data = new FormData();
+
+        for (const file of filesMap.values()) {
+          data.append("files[]", file, file.name);
+        }
+        data.append("assignment_id", TASK_SELECTOR.value);
+
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            "Accept": "application/json",
+          },
+          body: data,
+        };
+
+        const res = await fetch(API_POINT, requestOptions);
+        if (!res.ok) return;
+
+        TASK_SELECTOR.disabled = false;
+        SUBMIT_BTN.disabled = false;
       }
 
       function display_assignment() {
@@ -331,7 +386,7 @@
       }
 
       function chek_duplicate(file) {
-        return Array.from(filesMap.values()).some((f) => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified);
+        return Array.from(filesMap.values()).some((f) => f.name === file.name);
       }
 
       function addFileToList(file, fileId) {
@@ -428,10 +483,12 @@
       DROP_ZONE.addEventListener("click", function () {
         FILE_INPUT.click();
       });
+      //   end of drag n drop zone
+      
       FILE_INPUT.addEventListener("change", function () {
         handleFiles(this.files);
       });
-      //   end of drag n drop zone
+      SUBMIT_BTN.addEventListener("click", submit_submission);
     </script>
   </body>
 </html>
