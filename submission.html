@@ -99,7 +99,7 @@
         align-items: center;
         padding: 10px;
         border-radius: 5px;
-        background-color: #5b5b5b;
+        background-color: #111;
         color: #fff;
         margin-bottom: 10px;
       }
@@ -210,7 +210,7 @@
           </svg>
           <p>change password</p>
         </a>
-        <a href="/logout">
+        <a href="#" id="logout-btn">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
@@ -285,6 +285,12 @@
 
       const SUBMIT_BTN = document.querySelector("#submit");
 
+      const LOGOUT = document.querySelector("#logout-btn");
+      LOGOUT.addEventListener("click", function () {
+        localStorage.removeItem("token");
+        window.location.href = "/login.html";
+      });
+
       const filesMap = new Map();
       let assignment = [];
 
@@ -333,6 +339,7 @@
         const API_POINT = BACKEND_URL + "/assignments";
         TASK_SELECTOR.disabled = true;
         const res = await get_fetch(API_POINT, { method: "GET" });
+        if (res.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
         if (!res.ok) return;
 
         const data = await res.json();
