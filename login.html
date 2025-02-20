@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="text/javascript" src="env.js" ></script>
+    <script type="text/javascript" src="env.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet" />
@@ -22,6 +22,9 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+      }
+      a {
+        color: currentColor;
       }
 
       .containner {
@@ -85,7 +88,7 @@
         align-items: center;
         padding: 10px;
         border-radius: 5px;
-        background-color: #5b5b5b;
+        background-color: #111;
         color: #fff;
         margin-bottom: 10px;
       }
@@ -133,10 +136,10 @@
 
       // check localStorage if had allready token
       let token = localStorage.getItem("token");
-      if (token) set_info("Sepertinya kamu udah login nih.", false);
+      if (token) set_info("Sepertinya kamu udah login nih. pergi ke halaman <a href='/submission.html'>submisi</a>.", false);
 
       function set_info(msg, is_err) {
-        INFO_BOX.querySelector("p").textContent = msg;
+        INFO_BOX.querySelector("p").innerHTML = msg;
         INFO_BOX.classList.toggle("hide", false);
         INFO_BOX.classList.toggle("error", is_err);
       }
@@ -156,9 +159,9 @@
         const password = PASSWORD_INPUT.value;
 
         const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nim, password})
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nim, password }),
         };
 
         const res = await fetch(API_POINT, requestOptions);
@@ -179,14 +182,14 @@
             break;
 
           default:
-            // default 
+            // default
             set_info(`Gagal login, status : ${res.status}`, true);
             break;
         }
 
         disabled_input(false);
       }
-      
+
       FORM.addEventListener("submit", submit_handler);
     </script>
   </body>
