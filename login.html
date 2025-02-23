@@ -136,7 +136,7 @@
 
       // check localStorage if had allready token
       let token = localStorage.getItem("token");
-      if (token) set_info("Sepertinya kamu udah login nih. pergi ke halaman <a href='/submission.html'>submisi</a>.", false);
+      if (token) set_info("Sepertinya kamu udah login nih. pergi ke halaman <a href='/'>submisi</a>.", false);
 
       function set_info(msg, is_err) {
         INFO_BOX.querySelector("p").innerHTML = msg;
