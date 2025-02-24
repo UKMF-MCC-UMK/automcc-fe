@@ -150,9 +150,40 @@
             }
 
             table {
+                border: 0;
+                box-shadow: none;
+            }
+
+            table thead{
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+
+            table tr {
                 display: block;
-                overflow-x: auto;
-                white-space: nowrap;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+            }
+
+            table td {
+                display: block;
+                font-size: .8em;
+                text-align: right;
+            }
+
+            table td::before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
             }
         }
     </style>
@@ -203,9 +234,9 @@
         <table>
             <thead>
                 <tr>
-                    <td>Tanggal Pengiriman</td>
-                    <td>Tugas</td>
-                    <td>Aksi</td>
+                    <td>Upload Date</td>
+                    <td>Assignment</td>
+                    <td>Action</td>
                 </tr>
             </thead>
             <tbody id="data"></tbody>
@@ -270,7 +301,9 @@
             const day = String(date.getDate()).padStart(2, '0');
             const month = String(date.getMonth() + 1).padStart(2, '0'); // Month di JS mulai dari 0
             const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
         }
 
         async function load_assignment() {
@@ -307,9 +340,9 @@
 
                 temp += `
                     <tr>
-                        <td>${formatDate(submission.created_at)}</td>
-                        <td>${assignmentName}</td>
-                        <td>
+                        <td data-label= "UPLOAD DATE">${formatDate(submission.created_at)}</td>
+                        <td data-label= "Assignment">${assignmentName}</td>
+                        <td data-label= "Action">
                             <a href="${BACKEND_STORAGE_URL}/${submission.folder_path}" target="_blank">Lihat</a>
                         </td>
                     </tr>
