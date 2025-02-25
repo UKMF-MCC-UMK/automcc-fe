@@ -1,344 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="text/javascript" src="env.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet" />
-    <title>login - AutoDeploy</title>
+    <title>submission list - AutoDeploy</title>
     <style>
-        body {
-            font-family: "Lexend", sans-serif;
-        }
+      body {
+        font-family: "Lexend", sans-serif;
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        a {
-            text-decoration: none;
-            color: #007bff;
-        }
+      a {
+        text-decoration: none;
+        color: #007bff;
+      }
 
-        .containner {
-            max-width: 30rem;
-            width: 100%;
-            padding: 20px;
-            margin: 0 auto;
-        }
+      .containner {
+        max-width: 30rem;
+        width: 100%;
+        padding: 20px;
+        margin: 0 auto;
+      }
 
-        h1 {
-            text-align: center;
-            font-size: 3em;
-        }
+      h1 {
+        text-align: center;
+        font-size: 3em;
+      }
 
-        form {
-            display: flex;
-            flex-direction: column;
-        }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
 
-        .wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+      .wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
 
-        .head {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
+      .head {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
 
-        button[type="submit"] {
-            width: fit-content;
-            padding: 10px 17px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: none;
-            background-color: #000000;
-            color: white;
-        }
+      button[type="submit"] {
+        width: fit-content;
+        padding: 10px 17px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: none;
+        background-color: #000000;
+        color: white;
+      }
 
-        button[type="submit"]:disabled {
-            background-color: #cccccc;
-        }
+      button[type="submit"]:disabled {
+        background-color: #cccccc;
+      }
 
-        .info-box {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #111;
-            color: #fff;
-            margin-bottom: 10px;
-        }
+      .info-box {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #111;
+        color: #fff;
+        margin-bottom: 10px;
+      }
 
-        .info-box.hide {
-            display: none;
-        }
+      .info-box.hide {
+        display: none;
+      }
 
-        .info-box.error {
-            background-color: #f44336;
-        }
+      .info-box.error {
+        background-color: #f44336;
+      }
 
-        nav>div {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+      nav > div {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
 
-        nav h3 {
-            color: #fff;
-        }
+      nav h3 {
+        color: #fff;
+      }
 
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 10px 20px;
-            justify-content: space-between;
-            background-color: #000000;
-        }
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 10px 20px;
+        justify-content: space-between;
+        background-color: #000000;
+      }
 
-        nav a {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background-color: #fff;
-            padding: 5px 7px;
-            border-radius: 5px;
-            color: #000000;
+      nav a {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background-color: #fff;
+        padding: 5px 7px;
+        border-radius: 5px;
+        color: #000000;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      th,
+      td {
+        padding: 14px 18px; /* Tambah padding supaya lebih luas */
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        white-space: nowrap; /* Mencegah pemotongan teks */
+      }
+
+      th {
+        background: #007bff;
+        color: white;
+        text-transform: uppercase;
+        font-size: 16px; /* Sedikit lebih besar */
+      }
+
+      tr:hover {
+        background: #f1f1f1;
+      }
+
+      @media (max-width: 700px) {
+        nav a p {
+          display: none;
         }
 
         table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          border: 0;
+          box-shadow: none;
         }
 
-        th, td {
-            padding: 14px 18px; /* Tambah padding supaya lebih luas */
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            white-space: nowrap; /* Mencegah pemotongan teks */
+        table thead {
+          border: none;
+          clip: rect(0 0 0 0);
+          height: 1px;
+          margin: -1px;
+          overflow: hidden;
+          padding: 0;
+          position: absolute;
+          width: 1px;
         }
 
-        th {
-            background: #007BFF;
-            color: white;
-            text-transform: uppercase;
-            font-size: 16px; /* Sedikit lebih besar */
+        table tr {
+          display: block;
+          border-collapse: collapse;
+          margin-bottom: 20px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
         }
 
-        tr:hover {
-            background: #f1f1f1;
+        table td {
+          display: block;
+          font-size: 0.8em;
+          text-align: right;
         }
 
-        @media (max-width: 500px) {
-            nav a p {
-                display: none;
-            }
-
-            table {
-                border: 0;
-                box-shadow: none;
-            }
-
-            table thead{
-                border: none;
-                clip: rect(0 0 0 0);
-                height: 1px;
-                margin: -1px;
-                overflow: hidden;
-                padding: 0;
-                position: absolute;
-                width: 1px;
-            }
-
-            table tr {
-                display: block;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                overflow: hidden;
-            }
-
-            table td {
-                display: block;
-                font-size: .8em;
-                text-align: right;
-            }
-
-            table td::before {
-                content: attr(data-label);
-                float: left;
-                font-weight: bold;
-                text-transform: uppercase;
-            }
+        table td::before {
+          content: attr(data-label);
+          float: left;
+          font-weight: bold;
+          text-transform: uppercase;
         }
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <nav>
-        <h3>MCC</h3>
-        <div>
-            <a href="/">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-list">
-                  <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                  <path d="M12 11h4" />
-                  <path d="M12 16h4" />
-                  <path d="M8 11h.01" />
-                  <path d="M8 16h.01" />
-                </svg>
-                <p>submission</p>
-              </a>
-            <a href="/changepassword.html">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-key-square">
-                    <path
-                        d="M12.4 2.7a2.5 2.5 0 0 1 3.4 0l5.5 5.5a2.5 2.5 0 0 1 0 3.4l-3.7 3.7a2.5 2.5 0 0 1-3.4 0L8.7 9.8a2.5 2.5 0 0 1 0-3.4z" />
-                    <path d="m14 7 3 3" />
-                    <path
-                        d="m9.4 10.6-6.814 6.814A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814" />
-                </svg>
-                <p>change password</p>
-            </a>
-            <a href="#" id="logout-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-log-out">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <polyline points="16 17 21 12 16 7" />
-                    <line x1="21" x2="9" y1="12" y2="12" />
-                </svg>
-                <p>Logout</p>
-            </a>
-        </div>
+      <h3>MCC</h3>
+      <div>
+        <a href="/">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-list">
+            <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            <path d="M12 11h4" />
+            <path d="M12 16h4" />
+            <path d="M8 11h.01" />
+            <path d="M8 16h.01" />
+          </svg>
+          <p>submission</p>
+        </a>
+        <a href="/changepassword.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-key-square">
+            <path d="M12.4 2.7a2.5 2.5 0 0 1 3.4 0l5.5 5.5a2.5 2.5 0 0 1 0 3.4l-3.7 3.7a2.5 2.5 0 0 1-3.4 0L8.7 9.8a2.5 2.5 0 0 1 0-3.4z" />
+            <path d="m14 7 3 3" />
+            <path d="m9.4 10.6-6.814 6.814A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814" />
+          </svg>
+          <p>change password</p>
+        </a>
+        <a href="#" id="logout-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" x2="9" y1="12" y2="12" />
+          </svg>
+          <p>Logout</p>
+        </a>
+      </div>
     </nav>
     <div class="loading hide"></div>
-    <br>
+    <br />
     <div class="containner">
-        <table>
-            <thead>
-                <tr>
-                    <td>Upload Date</td>
-                    <td>Assignment</td>
-                    <td>Action</td>
-                </tr>
-            </thead>
-            <tbody id="data"></tbody>
-        </table>
+      <table>
+        <thead>
+          <tr>
+            <td>Upload Date</td>
+            <td>Assignment</td>
+            <td>Action</td>
+          </tr>
+        </thead>
+        <tbody id="data"></tbody>
+      </table>
     </div>
 
     <script>
-        // config
-        const INFO_BOX = document.querySelector(".info-box");
-        const LOADING_BOX = document.querySelector(".loading");
+      // config
+      const INFO_BOX = document.querySelector(".info-box");
+      const LOADING_BOX = document.querySelector(".loading");
 
-        const LOGOUT = document.querySelector("#logout-btn");
-        LOGOUT.addEventListener("click", function () {
-            localStorage.removeItem("token");
-            window.location.href = "/login.html";
+      const LOGOUT = document.querySelector("#logout-btn");
+      LOGOUT.addEventListener("click", function () {
+        localStorage.removeItem("token");
+        window.location.href = "/login.html";
+      });
+
+      let assignment = [];
+
+      async function get_fetch(url, requestOptions = {}) {
+        set_loading();
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          window.location.href = "/login.html";
+        }
+
+        requestOptions.headers = {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          Authorization: `Bearer ${token}`,
+        };
+
+        const res = await fetch(url, requestOptions);
+
+        set_loading(false);
+
+        if (!res.ok) {
+          set_info("Koneksi Error.", true);
+          return res;
+        }
+
+        if (!res.status === 401) {
+          localStorage.removeItem("token");
+          window.location.href = "/login.html";
+        }
+
+        return res;
+      }
+      function set_loading(force = true) {
+        LOADING_BOX.classList.toggle("hide", !force);
+      }
+
+      function set_info(msg, is_err) {
+        INFO_BOX.querySelector("p").textContent = msg;
+        INFO_BOX.classList.toggle("hide", false);
+        INFO_BOX.classList.toggle("error", is_err);
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Month di JS mulai dari 0
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
+      }
+
+      async function load_assignment() {
+        const API_POINT = BACKEND_URL + "/assignments";
+        const res = await get_fetch(API_POINT, { method: "GET" });
+        if (res.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
+        if (!res.ok) return;
+
+        const data = await res.json();
+        assignment = data.data;
+        return assignment;
+      }
+
+      // display_submission();
+      async function display_submission() {
+        const API_POINT = BACKEND_URL + "/user-submissions";
+        const res = await get_fetch(API_POINT, { method: "GET" });
+
+        if (res.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
+        if (!res.ok) return;
+
+        const submissions = await res.json();
+
+        const assignments = await load_assignment();
+
+        const assignmentMap = {};
+        assignments.forEach((assignment) => {
+          assignmentMap[assignment.id] = assignment.title; // Simpan dalam objek untuk akses cepat
         });
 
-        let assignment = [];
+        let temp = "";
+        submissions.forEach((submission) => {
+          const assignmentName = assignmentMap[submission.assignment_id] || "Unknown Assignment";
 
-        async function get_fetch(url, requestOptions = {}) {
-            set_loading();
-
-            const token = localStorage.getItem("token");
-
-            if (!token) {
-                window.location.href = "/login.html";
-            }
-
-            requestOptions.headers = {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            };
-
-            const res = await fetch(url, requestOptions);
-
-            set_loading(false);
-
-            if (!res.ok) {
-                set_info("Koneksi Error.", true);
-                return res;
-            }
-
-            if (!res.status === 401) {
-                localStorage.removeItem("token");
-                window.location.href = "/login.html";
-            }
-
-            return res;
-        }
-        function set_loading(force = true) {
-            LOADING_BOX.classList.toggle("hide", !force);
-        }
-
-        function set_info(msg, is_err) {
-            INFO_BOX.querySelector("p").textContent = msg;
-            INFO_BOX.classList.toggle("hide", false);
-            INFO_BOX.classList.toggle("error", is_err);
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0'); // Month di JS mulai dari 0
-            const year = date.getFullYear();
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            return `${day}/${month}/${year} ${hours}:${minutes}`;
-        }
-
-        async function load_assignment() {
-            const API_POINT = BACKEND_URL + "/assignments";
-            const res = await get_fetch(API_POINT, { method: "GET" });
-            if (res.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
-            if (!res.ok) return;
-
-            const data = await res.json();
-            assignment = data.data;
-            return assignment;
-        }
-
-        // display_submission();
-        async function display_submission(){
-            const API_POINT = BACKEND_URL + "/user-submissions";
-            const res = await get_fetch(API_POINT, { method: "GET" });
-
-            if (res.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
-            if (!res.ok) return;
-
-            const submissions = await res.json();
-
-            const assignments = await load_assignment();
-
-            const assignmentMap = {};
-            assignments.forEach(assignment => {
-                assignmentMap[assignment.id] = assignment.title; // Simpan dalam objek untuk akses cepat
-            });
-
-            let temp = "";
-            submissions.forEach(submission => {
-                const assignmentName = assignmentMap[submission.assignment_id] || "Unknown Assignment";
-
-                temp += `
+          temp += `
                     <tr>
                         <td data-label= "UPLOAD DATE">${formatDate(submission.created_at)}</td>
                         <td data-label= "Assignment">${assignmentName}</td>
@@ -347,13 +342,12 @@
                         </td>
                     </tr>
                 `;
-            });
+        });
 
-            document.getElementById("data").innerHTML = temp;
-        }
+        document.getElementById("data").innerHTML = temp;
+      }
 
-        document.addEventListener("DOMContentLoaded", display_submission);
+      document.addEventListener("DOMContentLoaded", display_submission);
     </script>
-</body>
-
+  </body>
 </html>
