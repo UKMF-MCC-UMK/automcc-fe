@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet" />
-    <title>login - AutoDeploy</title>
+    <title>submission - AutoDeploy</title>
     <style>
       body {
         font-family: "Lexend", sans-serif;
@@ -352,6 +352,7 @@
         try {
           requestOptions.headers = {
             "Content-Type": "application/json",
+            "Accept": "application/json",
             Authorization: `Bearer ${token}`,
           };
 
