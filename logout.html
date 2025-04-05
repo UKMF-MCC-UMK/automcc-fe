@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript" src="env.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet" />
+    <title>logout - AutoDeploy</title>
+  </head>
+  <body>
+    <p>Sedang keluar.. silahkan tunggu</p>
+    <script>
+      async function logout() {
+        const API_ENDPOINT = BACKEND_URL + "/logout";
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          window.location.href = "/login.html";
+        }
+
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        try {
+          const res = await fetch(API_ENDPOINT, requestOptions);
+        } catch (error) {
+          console.log(error);
+        }
+
+        removeToken();
+      }
+      function removeToken() {
+        localStorage.removeItem("token");
+        document.body.innerHTML += `<p>Kembali kehalaman <a href="/login.html">login</a></p>`;
+        window.location.href = "/login.html";
+      }
+
+      logout();
+    </script>
+  </body>
+</html>
