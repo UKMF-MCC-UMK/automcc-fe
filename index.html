@@ -415,7 +415,7 @@
         if (!res.ok) return;
 
         userSubmissions = await res.json();
-        console.log(userSubmissions);
+        // console.log(userSubmissions);
 
         handle_task_change();
       }
@@ -436,7 +436,7 @@
                 </svg>
                 <p>${e.split("/").pop()}</p>
               </div>
-              <a href="${BACKEND_STORAGE_URL + e}">Lihat</a>
+              <a href="${BACKEND_STORAGE_URL}/${e}">Lihat</a>
             </div>`;
         });
       }
@@ -606,7 +606,7 @@
           if (!chek_duplicate(file)) {
             filesMap.set(fileId, file);
             addFileToList(file, fileId);
-            console.log(file);
+            // console.log(file);
           } else {
             set_info(`File ${file.name} sudah titambahkan`, true);
           }
