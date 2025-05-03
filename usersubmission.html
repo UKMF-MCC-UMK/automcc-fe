@@ -26,6 +26,8 @@
 
       .containner {
         max-width: 30rem;
+        display: flex;
+        justify-content: center;
         width: 100%;
         padding: 20px;
         margin: 0 auto;
@@ -117,7 +119,7 @@
       }
 
       table {
-        width: 100%;
+
         border-collapse: collapse;
         background: white;
         border-radius: 8px;
@@ -127,26 +129,91 @@
 
       th,
       td {
-        padding: 14px 18px; /* Tambah padding supaya lebih luas */
+        padding: 14px 18px;
         text-align: left;
         border-bottom: 1px solid #ddd;
-        white-space: nowrap; /* Mencegah pemotongan teks */
+        white-space: nowrap;
       }
 
       th {
         background: #007bff;
         color: white;
         text-transform: uppercase;
-        font-size: 16px; /* Sedikit lebih besar */
+        font-size: 16px;
       }
 
       tr:hover {
         background: #f1f1f1;
       }
 
-      @media (max-width: 700px) {
-        nav a p {
-          display: none;
+      .btnModal {
+        cursor: pointer;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+        z-index: "9998";
+      }
+
+      .modal-content-bg {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: white;
+        width: 350px;
+        height: 350px;
+        border-radius: 8px;
+      }
+
+      .close {
+          color: #aaa;
+          margin-top: 10px;
+          margin-right: 20px;
+          margin-left: auto;
+          font-size: 28px;
+          font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content {
+            width: 100%;
+        }
+        .modal-content h3 {
+            margin-left: 20px;
+        }
+        .scores {
+          display: flex;
+          justify-content: space-around;
+          margin-top: 20px;
+        }
+        .column {
+          text-align: center;
+        }
+
+        .column div {
+          margin: 5px 0;
+        }
+        .note {
+          margin: 20px;
+        }
+
+        @media (max-width: 700px) {
+            nav a p {
+                display: none;
         }
 
         table {
@@ -231,16 +298,28 @@
             <td>Upload Date</td>
             <td>Assignment</td>
             <td>Action</td>
+            <td>Nilai</td>
           </tr>
         </thead>
         <tbody id="data"></tbody>
       </table>
     </div>
 
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content-bg">
+          <span class="close">&times;</span>
+          <div id="modal-content" class="modal-content">
+        </div>
+    </div>
+
     <script>
       // config
       const INFO_BOX = document.querySelector(".info-box");
       const LOADING_BOX = document.querySelector(".loading");
+      const modal = document.getElementById("myModal");
+      const modalContent = document.getElementById("modal-content");
+      const span = document.getElementsByClassName("close")[0];
 
       const LOGOUT = document.querySelector("#logout-btn");
       LOGOUT.addEventListener("click", function () {
@@ -312,7 +391,30 @@
         return assignment;
       }
 
-      // display_submission();
+      function showModal(submission) {
+
+        modalContent.innerHTML = `
+            <h3>Detail Nilai</h3>
+            <div class="scores">
+                <div class="column">
+                    <div>Kriteria</div>
+                    <div>${submission.criteria_score}</div>
+                </div>
+                <div class="column">
+                    <div>Estetika</div>
+                    <div>${submission.aestethic_score}</div>
+                </div>
+            </div>
+            <div class="note">
+              <h4>Note:</h4>
+              <p id="note-content">${submission.note}</p>
+          </div>
+        `;
+
+        // Display the modal
+        modal.style.display = "flex";
+      }
+
       async function display_submission() {
         const API_POINT = BACKEND_URL + "/user-submissions";
         const res = await get_fetch(API_POINT, { method: "GET" });
@@ -330,9 +432,11 @@
         });
 
         let temp = "";
-        submissions.forEach((submission) => {
+        submissions.forEach((submission, index) => {
           const assignmentName = assignmentMap[submission.assignment_id] || "Unknown Assignment";
 
+        //   <td data-label= "Nilai-Criteria">${submission.criteria_score}</td>
+        //   <td data-label= "Nilai-Score">${submission.aestethic_score}</td>
           temp += `
                     <tr>
                         <td data-label= "UPLOAD DATE">${formatDate(submission.created_at)}</td>
@@ -340,13 +444,30 @@
                         <td data-label= "Action">
                             <a href="${BACKEND_STORAGE_URL}/${submission.folder_path}" target="_blank">Lihat</a>
                         </td>
+                        <td data-label= "Nilai"><a class="btnModal" data-index="${index}">Lihat</a></td>
                     </tr>
                 `;
         });
 
         document.getElementById("data").innerHTML = temp;
+        document.querySelectorAll('.btnModal').forEach(button => {
+          button.addEventListener('click', function() {
+            const index = this.getAttribute('data-index');
+            showModal(submissions[index]);
+          });
+        });
       }
 
+      span.onclick = function() {
+            modal.style.display = "none";
+      }
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+      }
       document.addEventListener("DOMContentLoaded", display_submission);
     </script>
   </body>
