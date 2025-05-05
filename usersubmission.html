@@ -105,6 +105,18 @@
         overflow: hidden;
       }
 
+      #note-content {
+        width: 100%;
+        background: transparent;
+        outline: none;
+        border: none;
+        height: fit-content;
+        resize: none;
+        margin-top: 12px;
+        font-size: 1rem;
+        color: black;
+      }
+
       .hide {
         display: none;
       }
@@ -421,12 +433,16 @@
             </div>
             <div class="note">
               <h4>Note:</h4>
-              <p id="note-content">${submission.note}</p>
+              <textarea id="note-content" disabled>${submission.note ?? "Tidak ada catatan"}</textarea>
           </div>
         `;
 
+        
         // Display the modal
         modal.style.display = "flex";
+
+        const noteContent = document.getElementById("note-content");
+        noteContent.style.height = noteContent.scrollHeight + "px"; // Set height to fit content
       }
 
       async function display_submission() {
