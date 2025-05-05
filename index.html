@@ -68,6 +68,10 @@
         color: #f44336;
         cursor: pointer;
       }
+      .file-item a {
+        color: #007bff;
+        cursor: pointer;
+      }
 
       select,
       input[type="text"],
@@ -147,6 +151,7 @@
       }
 
       .file-list {
+        margin-top: 10px;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -233,7 +238,7 @@
           </svg>
           <p>change password</p>
         </a>
-        <a href="#" id="logout-btn">
+        <a href="/logout.html">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
@@ -267,6 +272,12 @@
         <div class="info-box hide">
           <p></p>
         </div>
+        <div id="user-submissions" class="hide">
+          <p>submisiku</p>
+          <div class="file-list" id="submissionList"></div>
+          <!-- <i>submission akan dimp</i> -->
+        </div>
+        <br />
         <p>sisipkan</p>
         <div class="file-list" id="fileList"></div>
         <div class="drop-zone" id="dropZone">
@@ -283,11 +294,6 @@
         <input type="file" accept=".html, .js, .css" id="fileInput" multiple hidden />
         <button type="submit" id="submit" class="btn active" disabled>Simpan Perubahan</button>
       </form>
-
-      <!-- <div class="wrap">
-        <p>Demo tersedia</p>
-        <a href="" class="btn active">Lihat Demo</a>
-      </div> -->
     </div>
 
     <script>
@@ -329,20 +335,17 @@
       const FILE_INPUT = document.getElementById("fileInput");
       const FILE_LIST = document.getElementById("fileList");
 
-      const SUBMIT_BTN = document.querySelector("#submit");
+      const USER_SUBMISSION_CONTAINER = document.getElementById("user-submissions");
+      const SUMBISSION_LIST = document.getElementById("submissionList");
 
-      const LOGOUT = document.querySelector("#logout-btn");
-      LOGOUT.addEventListener("click", function () {
-        localStorage.removeItem("token");
-        window.location.href = "/login.html";
-      });
+      const SUBMIT_BTN = document.querySelector("#submit");
 
       const filesMap = new Map();
       let assignment = [];
+      let userSubmissions = [];
 
       async function get_fetch(url, requestOptions = {}) {
-        set_loading();
-
+        // set_loading();
         const token = localStorage.getItem("token");
 
         if (!token) {
@@ -352,12 +355,12 @@
         try {
           requestOptions.headers = {
             "Content-Type": "application/json",
-            "Accept": "application/json",
+            Accept: "application/json",
             Authorization: `Bearer ${token}`,
           };
 
           const res = await fetch(url, requestOptions);
-          set_loading(false);
+          // set_loading(false);
 
           if (!res.ok) {
             set_info("Koneksi Error.", true);
@@ -370,7 +373,7 @@
           }
           return res;
         } catch (error) {
-          set_loading(false);
+          // set_loading(false);
           set_info("Tak dapat terhubung ke server.", true);
           console.log(error);
         }
@@ -389,15 +392,53 @@
       async function load_assignment() {
         const API_POINT = BACKEND_URL + "/assignments";
         TASK_SELECTOR.disabled = true;
-        const res = await get_fetch(API_POINT, { method: "GET" });
-        if (res.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
-        if (!res.ok) return;
+        set_loading();
+        const allTasks = await get_fetch(API_POINT, { method: "GET" });
+        if (allTasks.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
+        if (!allTasks.ok) return;
 
-        const data = await res.json();
+        const data = await allTasks.json();
         assignment = data.data;
         display_assignment();
         display_criteria(assignment[assignment.length - 1].criterias);
         TASK_SELECTOR.disabled = false;
+
+        set_loading(false);
+        load_userSubmission();
+      }
+
+      async function load_userSubmission() {
+        const API_POINT = BACKEND_URL + "/user-submissions";
+        const res = await get_fetch(API_POINT, { method: "GET" });
+
+        if (res.status == 500) return set_info("terjadi sesuatu, coba login kembali.", true);
+        if (!res.ok) return;
+
+        userSubmissions = await res.json();
+        // console.log(userSubmissions);
+
+        handle_task_change();
+      }
+
+      function display_userSubmission(id) {
+        SUMBISSION_LIST.innerHTML = "";
+
+        const submission_assignment = userSubmissions.find((e) => e.assignment_id === id);
+        if (!submission_assignment) return USER_SUBMISSION_CONTAINER.classList.toggle("hide", true);
+        USER_SUBMISSION_CONTAINER.classList.toggle("hide", false);
+        // userSubmissions.forEach(())
+        submission_assignment.file_list.forEach((e) => {
+          SUMBISSION_LIST.innerHTML += ` 
+            <div class="file-item">
+              <div class="title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-fill" viewBox="0 0 16 16">
+                  <path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2m5.5 1.5v2a1 1 0 0 0 1 1h2z" />
+                </svg>
+                <p>${e.split("/").pop()}</p>
+              </div>
+              <a href="${BACKEND_STORAGE_URL}/${e}">Lihat</a>
+            </div>`;
+        });
       }
 
       async function submit_submission(e) {
@@ -430,6 +471,7 @@
             case 200:
             case 201:
               set_info("Berhasil submit!", false);
+              load_userSubmission();
               break;
             case 422:
             case 403:
@@ -465,6 +507,7 @@
         const task = assignment.find((t) => t.id === taskId);
         if (!task) return;
         display_criteria(task.criterias);
+        display_userSubmission(taskId);
       }
 
       function display_criteria(criterias) {
@@ -482,6 +525,7 @@
 
       load_assignment();
 
+      // user submission
       //   drag n drop zone
       function preventDefaults(e) {
         e.preventDefault();
@@ -565,7 +609,7 @@
           if (!chek_duplicate(file)) {
             filesMap.set(fileId, file);
             addFileToList(file, fileId);
-            console.log(file);
+            // console.log(file);
           } else {
             set_info(`File ${file.name} sudah titambahkan`, true);
           }
