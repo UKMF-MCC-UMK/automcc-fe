@@ -465,16 +465,15 @@
         });
 
         document.getElementById("data").innerHTML = temp;
+        document.querySelectorAll('.btnModal').forEach(button => {
+            button.addEventListener('click', function() {
+            const index = this.getAttribute('data-index');
+            showModal(submissions[index]);
+            });
+        });
         set_loading(false);
       }
 
-      document.querySelectorAll('.btnModal').forEach(button => {
-        button.addEventListener('click', function() {
-          const index = this.getAttribute('data-index');
-          showModal(submissions[index]);
-        });
-      });
-      
       span.onclick = function() {
             modal.style.display = "none";
       }
