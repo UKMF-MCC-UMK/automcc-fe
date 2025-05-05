@@ -89,6 +89,26 @@
         background-color: #f44336;
       }
 
+      .loading {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        cursor: progress;
+        overflow: hidden;
+      }
+
+      .hide {
+        display: none;
+      }
+
       nav > div {
         display: flex;
         align-items: center;
@@ -279,7 +299,7 @@
           </svg>
           <p>change password</p>
         </a>
-        <a href="#" id="logout-btn">
+        <a href="/logout.html">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
@@ -321,16 +341,10 @@
       const modalContent = document.getElementById("modal-content");
       const span = document.getElementsByClassName("close")[0];
 
-      const LOGOUT = document.querySelector("#logout-btn");
-      LOGOUT.addEventListener("click", function () {
-        localStorage.removeItem("token");
-        window.location.href = "/login.html";
-      });
-
       let assignment = [];
 
       async function get_fetch(url, requestOptions = {}) {
-        set_loading();
+        // set_loading();
 
         const token = localStorage.getItem("token");
 
@@ -340,13 +354,13 @@
 
         requestOptions.headers = {
           "Content-Type": "application/json",
-          "Accept": "application/json",
+          Accept: "application/json",
           Authorization: `Bearer ${token}`,
         };
 
         const res = await fetch(url, requestOptions);
 
-        set_loading(false);
+        // set_loading(false);
 
         if (!res.ok) {
           set_info("Koneksi Error.", true);
@@ -383,7 +397,7 @@
       async function load_assignment() {
         const API_POINT = BACKEND_URL + "/assignments";
         const res = await get_fetch(API_POINT, { method: "GET" });
-        if (res.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
+        if (res.status == 500) return set_info("terjadi sesuatu, coba login kembali.", true);
         if (!res.ok) return;
 
         const data = await res.json();
@@ -416,10 +430,11 @@
       }
 
       async function display_submission() {
+        set_loading();
         const API_POINT = BACKEND_URL + "/user-submissions";
         const res = await get_fetch(API_POINT, { method: "GET" });
 
-        if (res.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
+        if (res.status == 500) return set_info("terjadi sesuatu, coba login kembali.", true);
         if (!res.ok) return;
 
         const submissions = await res.json();
@@ -450,14 +465,16 @@
         });
 
         document.getElementById("data").innerHTML = temp;
-        document.querySelectorAll('.btnModal').forEach(button => {
-          button.addEventListener('click', function() {
-            const index = this.getAttribute('data-index');
-            showModal(submissions[index]);
-          });
-        });
+        set_loading(false);
       }
 
+      document.querySelectorAll('.btnModal').forEach(button => {
+        button.addEventListener('click', function() {
+          const index = this.getAttribute('data-index');
+          showModal(submissions[index]);
+        });
+      });
+      
       span.onclick = function() {
             modal.style.display = "none";
       }
