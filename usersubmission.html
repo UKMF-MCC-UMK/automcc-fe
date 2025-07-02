@@ -288,7 +288,7 @@
           return res;
         }
 
-        if (!res.status === 401) {
+        if (res.status === 401) {
           localStorage.removeItem("token");
           window.location.href = "/login.html";
         }

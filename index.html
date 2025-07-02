@@ -367,7 +367,7 @@
             return res;
           }
 
-          if (!res.status === 401) {
+          if (res.status === 401) {
             localStorage.removeItem("token");
             window.location.href = "/login.html";
           }
@@ -376,6 +376,7 @@
           // set_loading(false);
           set_info("Tak dapat terhubung ke server.", true);
           console.log(error);
+          return { ok: false, status: 500, message: "Koneksi Error" };
         }
       }
 
@@ -394,8 +395,10 @@
         TASK_SELECTOR.disabled = true;
         set_loading();
         const allTasks = await get_fetch(API_POINT, { method: "GET" });
-        if (allTasks.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
-        if (!allTasks.ok) return;
+        if (allTasks.status == 500 || !allTasks.ok) {
+          set_loading(false);
+          return set_info("terjadi seuatu, coba login kembali.", true);
+        }
 
         const data = await allTasks.json();
         assignment = data.data;
