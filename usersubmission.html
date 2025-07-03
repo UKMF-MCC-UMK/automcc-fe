@@ -370,21 +370,22 @@
           Authorization: `Bearer ${token}`,
         };
 
-        const res = await fetch(url, requestOptions);
+        try {
+          const res = await fetch(url, requestOptions);
 
-        // set_loading(false);
-
-        if (!res.ok) {
-          set_info("Koneksi Error.", true);
-          return res;
+          if (!res.ok) {
+            if (res.status === 401) {
+              localStorage.removeItem("token");
+              window.location.href = "/login.html";
+            } else {
+              console.error("Error fetching data:", res.status, res.statusText);
+            }
+            return null;
+          }
+        } catch (error) {
+          console.error("Fetch error:", error);
+          return null;
         }
-
-        if (!res.status === 401) {
-          localStorage.removeItem("token");
-          window.location.href = "/login.html";
-        }
-
-        return res;
       }
       function set_loading(force = true) {
         LOADING_BOX.classList.toggle("hide", !force);
@@ -409,8 +410,11 @@
       async function load_assignment() {
         const API_POINT = BACKEND_URL + "/assignments";
         const res = await get_fetch(API_POINT, { method: "GET" });
-        if (res.status == 500) return set_info("terjadi sesuatu, coba login kembali.", true);
-        if (!res.ok) return;
+
+        if (!res) {
+          set_info("Gagal memuat tugas.", true);
+          return null;
+        }
 
         const data = await res.json();
         assignment = data.data;
@@ -450,8 +454,11 @@
         const API_POINT = BACKEND_URL + "/user-submissions";
         const res = await get_fetch(API_POINT, { method: "GET" });
 
-        if (res.status == 500) return set_info("terjadi sesuatu, coba login kembali.", true);
-        if (!res.ok) return;
+        if (!res) {
+          set_info("Gagal memuat submisi.", true);
+          set_loading(false);
+          return;
+        }
 
         const submissions = await res.json();
 

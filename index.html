@@ -360,22 +360,22 @@
           };
 
           const res = await fetch(url, requestOptions);
-          // set_loading(false);
 
           if (!res.ok) {
-            set_info("Koneksi Error.", true);
-            return res;
+            if (res.status === 401) {
+              // token invalid or expired
+              localStorage.removeItem("token");
+              window.location.href = "/login.html";
+            } else {
+              console.log(`Error: ${res.status} - ${res.statusText}`);
+            }
+            return null;
           }
 
-          if (!res.status === 401) {
-            localStorage.removeItem("token");
-            window.location.href = "/login.html";
-          }
           return res;
         } catch (error) {
-          // set_loading(false);
-          set_info("Tak dapat terhubung ke server.", true);
           console.log(error);
+          return null;
         }
       }
 
@@ -394,8 +394,12 @@
         TASK_SELECTOR.disabled = true;
         set_loading();
         const allTasks = await get_fetch(API_POINT, { method: "GET" });
-        if (allTasks.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
-        if (!allTasks.ok) return;
+
+        if (!allTasks) {
+          set_info("Gagal memuat tugas.", true);
+          set_loading(false);
+          return;
+        }
 
         const data = await allTasks.json();
         assignment = data.data;
@@ -411,11 +415,12 @@
         const API_POINT = BACKEND_URL + "/user-submissions";
         const res = await get_fetch(API_POINT, { method: "GET" });
 
-        if (res.status == 500) return set_info("terjadi sesuatu, coba login kembali.", true);
-        if (!res.ok) return;
+        if (!res) {
+          set_info("Gagal memuat submisi.", true);
+          return;
+        }
 
         userSubmissions = await res.json();
-        // console.log(userSubmissions);
 
         handle_task_change();
       }
