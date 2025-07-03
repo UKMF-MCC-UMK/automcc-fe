@@ -281,16 +281,14 @@
 
         const res = await fetch(url, requestOptions);
 
-        // set_loading(false);
-
         if (!res.ok) {
-          set_info("Koneksi Error.", true);
-          return res;
-        }
-
-        if (res.status === 401) {
-          localStorage.removeItem("token");
-          window.location.href = "/login.html";
+          if (res.status === 401) {
+            localStorage.removeItem("token");
+            window.location.href = "/login.html";
+          } else {
+            set_info("Koneksi Error.", true);
+            return res;
+          }
         }
 
         return res;
