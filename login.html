@@ -14,7 +14,7 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-
+        background: #fff;
         font-family: "Lexend", sans-serif;
       }
 
@@ -135,7 +135,10 @@
 
       // check localStorage if had allready token
       let token = localStorage.getItem("token");
-      if (token) set_info("Sepertinya kamu udah login nih. <a href='/'>login ulang</a>?", false);
+      if (token) {
+        set_info("Sepertinya kamu udah login nih. <a href='/logout.html'>login ulang</a>? <a href='/'>Buka Dashboard</a>.", false);
+        disabled_input();
+      }
 
       function set_info(msg, is_err) {
         INFO_BOX.querySelector("p").innerHTML = msg;

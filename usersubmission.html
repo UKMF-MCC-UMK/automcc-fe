@@ -10,6 +10,7 @@
     <title>submission list - AutoDeploy</title>
     <style>
       body {
+        background: #fff;
         font-family: "Lexend", sans-serif;
       }
 
@@ -322,6 +323,8 @@
       </div>
     </nav>
     <div class="loading hide"></div>
+
+        <div class="info-box hide">
     <br />
     <div class="containner">
       <table>
@@ -382,6 +385,7 @@
             }
             return null;
           }
+          return res
         } catch (error) {
           console.error("Fetch error:", error);
           return null;
