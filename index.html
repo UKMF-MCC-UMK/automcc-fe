@@ -146,7 +146,7 @@
         const data = await allTasks.res.json();
         assignment = data.data;
         display_assignment();
-        display_criteria(assignment[0].criterias);
+        display_criteria(assignment[assignment.length - 1].criterias);
         TASK_SELECTOR.disabled = false;
 
         set_loading(false);
@@ -175,7 +175,7 @@
         USER_SUBMISSION_CONTAINER.classList.toggle("hide", false);
         // userSubmissions.forEach(())
         submission_assignment.file_list.forEach((e) => {
-          SUMBISSION_LIST.innerHTML += ` 
+          SUMBISSION_LIST.innerHTML += `
             <div class="file-item">
               <div class="title">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-fill" viewBox="0 0 16 16">
@@ -236,7 +236,6 @@
 
       function display_assignment() {
         TASK_SELECTOR.innerHTML = "";
-        // TASK_LIST.innerHTML = "";
 
         assignment.forEach((task) => {
           const option = document.createElement("option");
@@ -244,6 +243,10 @@
           option.textContent = task.title;
           TASK_SELECTOR.appendChild(option);
         });
+
+        if (assignment.length > 0) {
+            TASK_SELECTOR.value = assignment[assignment.length - 1].id;
+        }
       }
 
       function handle_task_change() {

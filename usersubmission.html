@@ -65,6 +65,7 @@
             <td>Upload Date</td>
             <td>Assignment</td>
             <td>Action</td>
+            <td>Nilai</td>
           </tr>
         </thead>
         <tbody id="data"></tbody>
@@ -72,10 +73,20 @@
     </div>
 
     <script src="utils/fetch-module.js"></script>
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content-bg">
+          <span class="close">&times;</span>
+          <div id="modal-content" class="modal-content">
+        </div>
+    </div>
     <script>
       // config
       const INFO_BOX = document.querySelector(".info-box");
       const LOADING_BOX = document.querySelector(".loading");
+      const modal = document.getElementById("myModal");
+      const modalContent = document.getElementById("modal-content");
+      const span = document.getElementsByClassName("close")[0];
 
       let assignment = [];
 
@@ -113,7 +124,34 @@
         return assignment;
       }
 
-      // display_submission();
+      function showModal(submission) {
+
+        modalContent.innerHTML = `
+            <h3>Detail Nilai</h3>
+            <div class="scores">
+                <div class="column">
+                    <div>Kriteria</div>
+                    <div>${submission.criteria_score}</div>
+                </div>
+                <div class="column">
+                    <div>Estetika</div>
+                    <div>${submission.aestethic_score}</div>
+                </div>
+            </div>
+            <div class="note">
+              <h4>Note:</h4>
+              <textarea id="note-content" disabled>${submission.note ?? "Tidak ada catatan"}</textarea>
+          </div>
+        `;
+
+        
+        // Display the modal
+        modal.style.display = "flex";
+
+        const noteContent = document.getElementById("note-content");
+        noteContent.style.height = noteContent.scrollHeight + "px"; // Set height to fit content
+      }
+
       async function display_submission() {
         set_loading();
         const API_POINT = BACKEND_URL + "/user-submissions";
@@ -135,9 +173,11 @@
         });
 
         let temp = "";
-        submissions.forEach((submission) => {
+        submissions.forEach((submission, index) => {
           const assignmentName = assignmentMap[submission.assignment_id] || "Unknown Assignment";
 
+        //   <td data-label= "Nilai-Criteria">${submission.criteria_score}</td>
+        //   <td data-label= "Nilai-Score">${submission.aestethic_score}</td>
           temp += `
                     <tr>
                         <td data-label= "UPLOAD DATE">${formatDate(submission.created_at)}</td>
@@ -145,15 +185,31 @@
                         <td data-label= "Action">
                             <a href="${BACKEND_STORAGE_URL}/${submission.folder_path}" target="_blank">Lihat</a>
                         </td>
+                        <td data-label= "Nilai"><a class="btnModal" data-index="${index}">Lihat</a></td>
                     </tr>
                 `;
         });
 
         document.getElementById("data").innerHTML = temp;
-
+        document.querySelectorAll('.btnModal').forEach(button => {
+            button.addEventListener('click', function() {
+            const index = this.getAttribute('data-index');
+            showModal(submissions[index]);
+            });
+        });
         set_loading(false);
       }
 
+      span.onclick = function() {
+            modal.style.display = "none";
+      }
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+      }
       document.addEventListener("DOMContentLoaded", display_submission);
     </script>
   </body>
