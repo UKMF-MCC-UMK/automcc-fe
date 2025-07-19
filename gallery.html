@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript" src="env.js"></script>
+    <script src="utils/protect.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="global.css" />
+    <title>Galleries - AutoDeploy</title>
+  </head>
+
+  <body>
+    <nav>
+      <h3>MCC</h3>
+      <div>
+         <a href="/usersubmission.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-check">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
+            <path d="m9 9.5 2 2 4-4" />
+          </svg>
+          <p>user submission</p>
+        </a>
+        <a href="/">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-list">
+            <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            <path d="M12 11h4" />
+            <path d="M12 16h4" />
+            <path d="M8 11h.01" />
+            <path d="M8 16h.01" />
+          </svg>
+          <p>submission</p>
+        </a>
+        <a href="/changepassword.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-key-square">
+            <path d="M12.4 2.7a2.5 2.5 0 0 1 3.4 0l5.5 5.5a2.5 2.5 0 0 1 0 3.4l-3.7 3.7a2.5 2.5 0 0 1-3.4 0L8.7 9.8a2.5 2.5 0 0 1 0-3.4z" />
+            <path d="m14 7 3 3" />
+            <path d="m9.4 10.6-6.814 6.814A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814" />
+          </svg>
+          <p>change password</p>
+        </a>
+        <a href="/logout.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" x2="9" y1="12" y2="12" />
+          </svg>
+          <p>Logout</p>
+        </a>
+      </div>
+    </nav>
+    <div class="loading hide"></div>
+    <div id="popup" class="hide">
+      <div class="popup-detail-bg"></div>
+      <div class="popup-detail">
+        <div class="image"></div>
+        <h3 class="title">abc dskaj[fj[d0sj fodahsnoinkd njfjanokj[pjdafpoanljknb]]]</h3>
+
+        <b>description</b>
+        <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis voluptatum iste rerum soluta porro impedit non, culpa ratione odit earum.</p>
+        <br />
+        <div class="row">
+          <button class="btn" onclick="hide_popup()">Tutup</button>
+          <a href="" class="open" style="width: 100%;">
+            <button class="btn dark">Lihat
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="info-box hide"></div>
+    <br />
+    <div class="containner" style="max-width: 50rem">
+      <h1>Gallery</h1>
+      <br />
+      <div class="colections"></div>
+    </div>
+
+    <script src="utils/fetch-module.js"></script>
+    <script>
+      // config
+      const INFO_BOX = document.querySelector(".info-box");
+      const LOADING_BOX = document.querySelector(".loading");
+      const COLECTIONS_CONTAINER = document.querySelector(".colections");
+      const POPUP = document.querySelector("#popup");
+
+      let galleries = [];
+
+      function show_popup(index) {
+        document.querySelector("#popup .image").style.backgroundImage = `url('${galleries[index].image_url}')`;
+        document.querySelector("#popup .title").textContent = galleries[index].title;
+        document.querySelector("#popup .description").textContent = galleries[index].description;
+        POPUP.classList.toggle("hide", false);
+        POPUP.querySelector("#popup .open").setAttribute("href", galleries[index].page_url);
+      }
+
+      function hide_popup() {
+        POPUP.classList.toggle("hide", true);
+      }
+
+      function set_loading(force = true) {
+        LOADING_BOX.classList.toggle("hide", !force);
+      }
+
+      function set_info(msg, is_err) {
+        INFO_BOX.querySelector("p").textContent = msg;
+        INFO_BOX.classList.toggle("hide", false);
+        INFO_BOX.classList.toggle("error", is_err);
+      }
+
+      async function load_galleries() {
+        const API_POINT = BACKEND_URL + "/galleries";
+        const res = await get_fetch(API_POINT, { method: "GET" });
+
+        if (!res.success) {
+          set_info(res.message, true);
+          return;
+        }
+
+        const data = await res.res.json();
+        galleries = data.data;
+        return galleries;
+      }
+
+      // display_submission();
+      async function display_galleries() {
+        set_loading();
+
+        const galleries = await load_galleries();
+
+        COLECTIONS_CONTAINER.innerHTML = "";
+        galleries.forEach((val, i) => {
+          COLECTIONS_CONTAINER.innerHTML += `  <div class="colection-item">
+          <div class="image" style="background-image: url('${val.image_url}')" onclick="show_popup(${i})"></div>
+          <div class="info">
+            <p>${val.title}</p>
+            <a href="${val.page_url}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+            </a>
+          </div>
+        </div>`;
+        });
+
+        set_loading(false);
+      }
+
+      document.addEventListener("DOMContentLoaded", display_galleries);
+    </script>
+  </body>
+</html>
