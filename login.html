@@ -7,100 +7,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="global.css" />
     <title>login - AutoDeploy</title>
-    <style>
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background: #fff;
-        font-family: "Lexend", sans-serif;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      a {
-        color: currentColor;
-      }
-
-      .containner {
-        max-width: 30rem;
-        width: 100%;
-        padding: 20px;
-      }
-
-      h1 {
-        text-align: center;
-        font-size: 3em;
-      }
-
-      form {
-        display: flex;
-        flex-direction: column;
-        /* width: 100%; */
-      }
-
-      .wrap {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        /* width: 100%; */
-      }
-
-      .head {
-        /* width: 100%; */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 2rem;
-        /* gap: 10px; */
-      }
-
-      input[type="text"],
-      input[type="password"] {
-        width: auto;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 0.2em solid #a1a1a1;
-        border-radius: 5px;
-      }
-
-      button[type="submit"] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: none;
-        background-color: #2196f3;
-        color: white;
-      }
-      button[type="submit"]:disabled {
-        background-color: #cccccc;
-      }
-
-      .info-box {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        border-radius: 5px;
-        background-color: #111;
-        color: #fff;
-        margin-bottom: 10px;
-      }
-      .info-box.hide {
-        display: none;
-      }
-      .info-box.error {
-        background-color: #f44336;
-      }
-    </style>
   </head>
-  <body>
+  <body class="login-page">
     <div class="containner">
       <div class="head">
         <h1>MCC</h1>
