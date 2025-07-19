@@ -4,220 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="text/javascript" src="env.js"></script>
+    <script src="utils/protect.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="global.css" />
     <title>submission - AutoDeploy</title>
-    <style>
-      body {
-        background: #fff;
-        font-family: "Lexend", sans-serif;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      a {
-        text-decoration: none;
-        color: #007bff;
-      }
-
-      .containner {
-        max-width: 30rem;
-        width: 100%;
-        padding: 20px;
-        margin: 0 auto;
-      }
-
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        /* width: 100%; */
-      }
-
-      .wrap {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        /* width: 100%; */
-      }
-
-      .file-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .file-item .title {
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-        gap: 10px;
-      }
-
-      .file-item .title p {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .file-item p.delete-action {
-        color: #f44336;
-        cursor: pointer;
-      }
-      .file-item a {
-        color: #007bff;
-        cursor: pointer;
-      }
-
-      select,
-      input[type="text"],
-      input[type="password"] {
-        width: auto;
-        padding: 10px;
-        /* margin-bottom: 10px; */
-        /* border: 0.2em solid #a1a1a1; */
-        border: none;
-        background-color: #f1f1f1;
-        border-radius: 5px;
-      }
-
-      .btn {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: none;
-        background-color: #e1e1e1;
-        color: black;
-      }
-
-      .btn.active {
-        background-color: #2196f3;
-        color: white;
-      }
-
-      .btn:disabled {
-        background-color: #cccccc;
-      }
-
-      .info-box {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        border-radius: 5px;
-        background-color: #111;
-        color: #fff;
-        margin-bottom: 10px;
-      }
-
-      .info-box.hide {
-        display: none;
-      }
-
-      .info-box.error {
-        background-color: #f44336;
-      }
-
-      .drop-zone {
-        padding: 10px;
-        background-color: #f1f1f1;
-        border-radius: 5px;
-        /* margin: 10px 0; */
-      }
-
-      .drop-zone .container {
-        width: 100%;
-        height: 100%;
-        border: 2px dashed #000000;
-        color: #000000;
-        border-radius: 5px;
-        padding: 20px;
-        text-align: center;
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        transition: background-color 0.3s ease;
-      }
-
-      .drop-zone:active,
-      .drop-zone.dragover {
-        background-color: #a1d5ff;
-      }
-
-      .file-list {
-        margin-top: 10px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .loading {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: rgba(0, 0, 0, 0.5);
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        cursor: progress;
-        overflow: hidden;
-      }
-
-      .hide {
-        display: none;
-      }
-
-      li {
-        list-style: decimal;
-        margin-left: 20px;
-      }
-
-      nav > div {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
-
-      nav h3 {
-        color: #fff;
-      }
-
-      nav {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        padding: 10px 20px;
-        justify-content: space-between;
-        background-color: #000000;
-      }
-
-      nav a {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        background-color: #fff;
-        padding: 5px 7px;
-        border-radius: 5px;
-        color: #000000;
-      }
-
-      @media (max-width: 700px) {
-        nav a p {
-          display: none;
-        }
-      }
-    </style>
   </head>
 
   <body>
@@ -269,7 +62,7 @@
       </div>
 
       <br />
-      <form action="" method="post">
+      <form action="" method="post" class="upload">
         <div class="info-box hide">
           <p></p>
         </div>
@@ -297,34 +90,8 @@
       </form>
     </div>
 
+    <script src="utils/fetch-module.js"></script>
     <script>
-      // config
-      const MAX_FILE_SIZE = 1024 * 1024 * 2; // => limiting each file (bytes); set zero (0) to disable
-      const FILE_TYPE_ALLOWED = [
-        // html css js
-        "text/html",
-        "text/css",
-        "text/javascript",
-        "application/javascript",
-        //   image
-        "image/png",
-        "image/jpeg",
-        "image/jpg",
-        "image/gif",
-        "image/bmp",
-        "image/webp",
-        "image/tiff",
-        "image/svg+xml",
-        // Fonts
-        "font/woff",
-        "font/woff2",
-        "font/ttf",
-        "font/otf",
-        // other
-        "text/plain",
-        "application/json",
-      ];
-
       const FORM = document.querySelector("form");
       const INFO_BOX = document.querySelector(".info-box");
       const LOADING_BOX = document.querySelector(".loading");
@@ -345,41 +112,6 @@
       let assignment = [];
       let userSubmissions = [];
 
-      async function get_fetch(url, requestOptions = {}) {
-        // set_loading();
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          window.location.href = "/login.html";
-        }
-
-        try {
-          requestOptions.headers = {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          };
-
-          const res = await fetch(url, requestOptions);
-
-          if (!res.ok) {
-            if (res.status === 401) {
-              // token invalid or expired
-              localStorage.removeItem("token");
-              window.location.href = "/login.html";
-            } else {
-              console.log(`Error: ${res.status} - ${res.statusText}`);
-            }
-            return null;
-          }
-
-          return res;
-        } catch (error) {
-          console.log(error);
-          return null;
-        }
-      }
-
       function set_loading(force = true) {
         LOADING_BOX.classList.toggle("hide", !force);
       }
@@ -396,13 +128,13 @@
         set_loading();
         const allTasks = await get_fetch(API_POINT, { method: "GET" });
 
-        if (!allTasks) {
-          set_info("Gagal memuat tugas.", true);
+        if (!allTasks.success) {
+          set_info(allTasks.message);
           set_loading(false);
           return;
         }
 
-        const data = await allTasks.json();
+        const data = await allTasks.res.json();
         assignment = data.data;
         display_assignment();
         display_criteria(assignment[0].criterias);
@@ -416,12 +148,12 @@
         const API_POINT = BACKEND_URL + "/user-submissions";
         const res = await get_fetch(API_POINT, { method: "GET" });
 
-        if (!res) {
-          set_info("Gagal memuat submisi.", true);
+        if (!res.success) {
+          set_info(res.message, true);
           return;
         }
 
-        userSubmissions = await res.json();
+        userSubmissions = await res.res.json();
 
         handle_task_change();
       }
