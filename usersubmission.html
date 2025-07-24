@@ -320,7 +320,8 @@
         if (res.status == 500) return set_info("terjadi seuatu, coba login kembali.", true);
         if (!res.ok) return;
 
-        const submissions = await res.json();
+        const data = await res.json();
+        const submissions = data.data;
 
         const assignments = await load_assignment();
 
