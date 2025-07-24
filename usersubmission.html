@@ -163,7 +163,8 @@
           return;
         }
 
-        const submissions = await res.res.json();
+        const data = await res.res.json();
+        const submissions = data.data;
 
         const assignments = await load_assignment();
 
