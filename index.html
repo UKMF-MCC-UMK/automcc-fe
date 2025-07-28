@@ -162,7 +162,8 @@
           return;
         }
 
-        userSubmissions = await res.res.json();
+        const data = await res.res.json();
+        userSubmissions = data.data;
 
         handle_task_change();
       }
@@ -170,7 +171,7 @@
       function display_userSubmission(id) {
         SUMBISSION_LIST.innerHTML = "";
 
-        const submission_assignment = userSubmissions.find((e) => e.assignment_id === id);
+        const submission_assignment = Object.values(userSubmissions).find((e) => e.assignment_id === id);
         if (!submission_assignment) return USER_SUBMISSION_CONTAINER.classList.toggle("hide", true);
         USER_SUBMISSION_CONTAINER.classList.toggle("hide", false);
         // userSubmissions.forEach(())

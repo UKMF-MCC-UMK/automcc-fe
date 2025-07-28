@@ -174,7 +174,7 @@
         });
 
         let temp = "";
-        submissions.forEach((submission, index) => {
+        Object.values(submissions).forEach((submission, index) => {
           const assignmentName = assignmentMap[submission.assignment_id] || "Unknown Assignment";
 
         //   <td data-label= "Nilai-Criteria">${submission.criteria_score}</td>
